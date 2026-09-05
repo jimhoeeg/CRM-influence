@@ -1,0 +1,416 @@
+<title>Køreplan for backend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap">
+<style>
+  :root{
+    --paper:#E9E5DC;
+    --surface:#F1EEE6;
+    --surface-2:#E2DDD1;
+    --ink:#22201C;
+    --ink-2:#5E5951;
+    --ink-3:#8C867A;
+    --line:#D2CCBE;
+    --line-soft:#DED8CB;
+    --moss:#5C6B57;
+    --clay:#A9694F;
+    --ash:#63757C;
+    --ochre:#8E7A48;
+    --grain:0.05;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#1A1917; --surface:#211F1B; --surface-2:#2A2823;
+      --ink:#E9E4D8; --ink-2:#A8A195; --ink-3:#7B756A;
+      --line:#38352E; --line-soft:#2E2C26;
+      --moss:#94A487; --clay:#CA9075; --ash:#90A4AB; --ochre:#BCA469;
+      --grain:0.07;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#1A1917; --surface:#211F1B; --surface-2:#2A2823;
+    --ink:#E9E4D8; --ink-2:#A8A195; --ink-3:#7B756A;
+    --line:#38352E; --line-soft:#2E2C26;
+    --moss:#94A487; --clay:#CA9075; --ash:#90A4AB; --ochre:#BCA469;
+    --grain:0.07;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:"Zen Kaku Gothic New","Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height:1.68;font-size:15px;position:relative;min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:var(--grain);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .page{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:56px clamp(20px,5vw,64px) 96px}
+
+  h1,h2,h3,.mincho{font-family:"Shippori Mincho",Georgia,"Times New Roman",serif;font-weight:500}
+  .label{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:500;display:block}
+  p{max-width:66ch}
+
+  /* ---- Hoved ---- */
+  header.doc{border-bottom:1px solid var(--line);padding-bottom:30px;margin-bottom:44px}
+  .kicker{display:flex;align-items:baseline;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+  .kicker .mark{font-family:"Shippori Mincho",Georgia,serif;font-size:19px;letter-spacing:.06em}
+  .kicker .sub{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+  h1{font-size:clamp(30px,4.4vw,44px);line-height:1.2;margin:0 0 14px;text-wrap:balance;max-width:19ch}
+  .standfirst{font-family:"Shippori Mincho",Georgia,serif;font-size:17px;line-height:1.66;color:var(--ink-2);max-width:52ch;margin:0}
+  .meta{display:flex;gap:30px;margin-top:26px;flex-wrap:wrap}
+  .meta div{display:flex;flex-direction:column;gap:2px}
+  .meta .v{font-family:"Shippori Mincho",Georgia,serif;font-size:15px;font-variant-numeric:tabular-nums}
+
+  /* ---- Sektioner ---- */
+  section{margin-bottom:58px}
+  h2{font-size:23px;margin:0 0 6px;letter-spacing:.01em}
+  .lede{color:var(--ink-2);font-size:14px;margin:0 0 24px;max-width:62ch}
+  h3{font-size:16px;margin:0 0 6px}
+
+  /* ---- Tabeller ---- */
+  .t-scroll{overflow-x:auto;margin:0 0 8px}
+  table{border-collapse:collapse;width:100%;min-width:620px}
+  th{
+    text-align:left;font-weight:500;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-3);padding:0 18px 9px 0;border-bottom:1px solid var(--line);white-space:nowrap;
+  }
+  td{padding:12px 18px 12px 0;border-bottom:1px solid var(--line-soft);vertical-align:top;font-size:13.5px;line-height:1.55}
+  td:last-child,th:last-child{padding-right:0}
+  td code, .code{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;
+    background:var(--surface);padding:1px 5px;border:1px solid var(--line-soft);white-space:nowrap;
+  }
+  tr:hover td{background:var(--surface)}
+  .muted{color:var(--ink-3)}
+
+  /* ---- Faser ---- */
+  .phase{
+    display:grid;grid-template-columns:62px 1fr;gap:0 22px;
+    padding:22px 0;border-bottom:1px solid var(--line-soft);
+  }
+  .phase:first-of-type{border-top:1px solid var(--line)}
+  .phase .n{
+    font-family:"Shippori Mincho",Georgia,serif;font-size:30px;line-height:1;color:var(--ink-3);
+    font-variant-numeric:tabular-nums;padding-top:2px;
+  }
+  .phase-head{display:flex;align-items:baseline;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:8px}
+  .phase h3{margin:0}
+  .phase .est{font-size:11.5px;color:var(--ink-3);letter-spacing:.06em;white-space:nowrap}
+  .phase ul{margin:0 0 12px;padding-left:17px;max-width:64ch}
+  .phase li{font-size:13.5px;color:var(--ink-2);line-height:1.6;margin-bottom:3px}
+  .phase li::marker{color:var(--ink-3)}
+  .done{
+    border-left:2px solid var(--moss);background:var(--surface);
+    padding:9px 14px;font-size:13px;color:var(--ink-2);max-width:64ch;line-height:1.55;
+  }
+  .done b{color:var(--ink);font-weight:500}
+
+  /* ---- Stak-kort ---- */
+  .stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:1px;background:var(--line-soft);border:1px solid var(--line-soft)}
+  .stack > div{background:var(--paper);padding:15px 16px 17px}
+  .stack h3{font-family:"Zen Kaku Gothic New",sans-serif;font-size:14px;font-weight:500;margin:4px 0 5px}
+  .stack p{font-size:12.5px;color:var(--ink-2);margin:0;line-height:1.55;max-width:none}
+
+  /* ---- Noter ---- */
+  .note{
+    border:1px solid var(--line);border-left:2px solid var(--clay);
+    padding:15px 18px;margin:24px 0 0;max-width:70ch;
+  }
+  .note h3{font-family:"Zen Kaku Gothic New",sans-serif;font-size:13.5px;font-weight:500;margin:0 0 5px}
+  .note p{font-size:13px;color:var(--ink-2);margin:0;line-height:1.6}
+
+  /* ---- Spørgsmål ---- */
+  .q{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:15px 0;border-bottom:1px solid var(--line-soft);align-items:start}
+  .q .bx{width:14px;height:14px;border:1px solid var(--ink-3);margin-top:5px}
+  .q h3{font-family:"Zen Kaku Gothic New",sans-serif;font-size:14px;font-weight:500;margin:0 0 3px}
+  .q p{font-size:13px;color:var(--ink-2);margin:0;max-width:64ch}
+
+  .foot{margin-top:56px;padding-top:20px;border-top:1px solid var(--line-soft);font-size:12px;color:var(--ink-3);max-width:72ch;line-height:1.65}
+
+  @media (max-width:620px){
+    .phase{grid-template-columns:1fr;gap:6px}
+    .phase .n{font-size:22px}
+  }
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important}}
+</style>
+
+<div class="page">
+
+  <header class="doc">
+    <div class="kicker">
+      <span class="mark">Byggeligt</span>
+      <span class="sub">Teknisk køreplan</span>
+    </div>
+    <h1>Fra prototype til kørende backend</h1>
+    <p class="standfirst">Ni spring, der tager CRM'et fra klikbare skærme til et system, som selv holder styr på mails, deadlines, brugsret og fakturaer.</p>
+    <div class="meta">
+      <div><span class="label">Anslået</span><span class="v">7–8 uger</span></div>
+      <div><span class="label">Forudsætning</span><span class="v">Én udvikler</span></div>
+      <div><span class="label">Første leverance</span><span class="v">Spring 2</span></div>
+      <div><span class="label">Data i</span><span class="v">EU (Irland)</span></div>
+    </div>
+  </header>
+
+  <section>
+    <h2>Stakken</h2>
+    <p class="lede">Bygget på det, I allerede har koblet på, så vi ikke introducerer nye leverandører uden grund.</p>
+    <div class="stack">
+      <div>
+        <span class="label">Database og login</span>
+        <h3>Supabase</h3>
+        <p>Postgres med row level security, auth og Edge Functions. Nyt projekt i eu-west-1 — jeres eksisterende projekt er en anden app.</p>
+      </div>
+      <div>
+        <span class="label">App</span>
+        <h3>Next.js + TypeScript</h3>
+        <p>Prototypens fire skærme porteres hertil. Deploy på Vercel med preview-miljø pr. gren.</p>
+      </div>
+      <div>
+        <span class="label">Mail ud</span>
+        <h3>Resend</h3>
+        <p>Opfølgninger, godkendelsesanmodninger og afrapporteringer. Webhooks fortæller os, hvem der åbnede hvad.</p>
+      </div>
+      <div>
+        <span class="label">Mail ind</span>
+        <h3>Gmail API</h3>
+        <p>Tråde matches mod brand og aftale. Nye afsendere bliver til forslag, ikke til automatisk oprettede leads.</p>
+      </div>
+      <div>
+        <span class="label">Kalender</span>
+        <h3>Google Calendar</h3>
+        <p>Én delt produktionskalender med to-vejs synkronisering på optagedage og deadlines.</p>
+      </div>
+      <div>
+        <span class="label">Automatik</span>
+        <h3>Postgres + n8n</h3>
+        <p>Det, der skal være pålideligt, kører i databasen. Det, I selv vil kunne rette, kører i n8n — mod vores API, aldrig direkte i basen.</p>
+      </div>
+    </div>
+    <div class="note">
+      <h3>To ting at afklare inden Spring 0</h3>
+      <p>Jeres Supabase-konto har kun projektet <span class="code">frivilligapp</span>, som står inaktivt — CRM'et skal have sit eget projekt i EU-regionen. Og n8n-forbindelsen svarede ikke, da jeg tjekkede; den skal verificeres, før vi planlægger noget oven på den.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Datamodellen</h2>
+    <p class="lede">Seksten tabeller. De seks nederste er dem, der gør det til et influencer-CRM frem for et almindeligt salgssystem — og dem, vi talte om manglede.</p>
+    <div class="t-scroll">
+      <table>
+        <thead><tr><th>Tabel</th><th>Indhold</th><th>Hvorfor den findes</th></tr></thead>
+        <tbody>
+          <tr><td><code>brands</code></td><td>Navn, CVR, branche, website, ejer, status</td><td>Kartoteket. Alt hænger på et brand.</td></tr>
+          <tr><td><code>contacts</code></td><td>Person, rolle, mail, telefon, samtykke</td><td>Mennesker skifter job — kontakten skal kunne flytte med.</td></tr>
+          <tr><td><code>deals</code></td><td>Titel, værdi, stage, sandsynlighed, forventet luk</td><td>Selve aftalen. Driver pipeline-skærmen.</td></tr>
+          <tr><td><code>deal_stage_history</code></td><td>Hver eneste stage-ændring, hvem og hvornår</td><td>Kun herfra kan vi regne konverteringsrater og liggetid ud.</td></tr>
+          <tr><td><code>activities</code></td><td>Mail, opkald, note, møde, automatisk handling</td><td>Historikken på aftalekortet. Append-only.</td></tr>
+          <tr><td><code>email_messages</code></td><td>Gmail-id, tråd, retning, udtrukne felter</td><td>Knytter korrespondancen til den rigtige aftale.</td></tr>
+          <tr><td><code>email_events</code></td><td>Leveret, åbnet, klikket, bounced</td><td>Fodrer temperatur-scoren og “åbnet tre gange”.</td></tr>
+          <tr><td><code>tasks</code></td><td>Menneskehandlinger med frist og ansvarlig</td><td>Det, ugebriefen beder dig om at gøre.</td></tr>
+          <tr><td><code>deliverables</code></td><td>Format, antal, deadline, ansvarlig, godkendt af</td><td>En vundet aftale er ikke leveret. Her ligger produktionen.</td></tr>
+          <tr><td><code>usage_rights</code></td><td>Kanaler, geografi, betalt annoncering, udløbsdato</td><td>Den dyreste post i aftalen. Udløb skal give besked, ikke ligge i en PDF.</td></tr>
+          <tr><td><code>rate_card</code></td><td>Pris pr. format, minimumspris, gyldig fra</td><td>Så du aldrig underpriser, fordi tallet lå i en gammel mail.</td></tr>
+          <tr><td><code>campaign_results</code></td><td>Visninger, engagement, klik, CPM, målt hvornår</td><td>Tallene der sælger næste aftale — og skriver genkøbs-oplægget.</td></tr>
+          <tr><td><code>capacity_blocks</code></td><td>Optagedage, ferie, hvor meget der kan leveres pr. uge</td><td>Svarer på “kan vi overhovedet nå det i oktober?” inden du siger ja.</td></tr>
+          <tr><td><code>exclusivity</code></td><td>Brand, kategori, periode</td><td>Advarer inden du sender tilbud til en konkurrent i karensperioden.</td></tr>
+          <tr><td><code>invoices</code></td><td>Beløb, forfald, status, eksternt bilagsnummer</td><td>Forecast mod virkelighed. Hvad er faktisk landet på kontoen.</td></tr>
+          <tr><td><code>automation_runs</code></td><td>Regel, aftale, handling, idempotensnøgle</td><td>Beviset for hvad systemet gjorde — og garantien mod dobbelte mails.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Ni spring</h2>
+    <p class="lede">Hvert spring slutter med noget, du selv kan prøve. Rækkefølgen er valgt, så du kan bruge systemet fra spring 2 — resten bygges ovenpå mens det kører.</p>
+
+    <div class="phase">
+      <span class="n">0</span>
+      <div>
+        <div class="phase-head"><h3>Fundament</h3><span class="est">½ uge</span></div>
+        <ul>
+          <li>Supabase-projekt i eu-west-1, adskilt <span class="code">dev</span> og <span class="code">prod</span></li>
+          <li>Next.js-repo med TypeScript, deploy på Vercel</li>
+          <li>Alle databaseændringer som migrationsfiler i git — intet klikkes manuelt ind</li>
+          <li>Login med magic link, kun for e-mails på en godkendt liste</li>
+        </ul>
+        <p class="done"><b>Færdig når</b> du kan logge ind på et tomt, beskyttet dashboard fra din telefon.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <span class="n">1</span>
+      <div>
+        <div class="phase-head"><h3>Datamodel og adgangskontrol</h3><span class="est">1 uge</span></div>
+        <ul>
+          <li>De seksten tabeller med relationer og indeks</li>
+          <li>Row level security på hver eneste tabel — servernøglen bruges kun inde i Edge Functions</li>
+          <li>Databasetrigger der skriver til <span class="code">deal_stage_history</span> ved hvert stage-skift</li>
+          <li>Prototypens demo-data lagt ind som seed, så skærmene har noget at vise</li>
+        </ul>
+        <p class="done"><b>Færdig når</b> Supabases egen sikkerhedsgennemgang melder rent, og data kun kan læses af en logget ind bruger.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <span class="n">2</span>
+      <div>
+        <div class="phase-head"><h3>Appen på rigtige data</h3><span class="est">1½ uge</span></div>
+        <ul>
+          <li>De fire skærme fra prototypen porteret til rigtige data</li>
+          <li>Træk og slip på pipelinen, med live opdatering hvis I er flere om skærmen</li>
+          <li>Oprettelse og redigering gennem validerede endepunkter — ikke direkte fra browseren</li>
+        </ul>
+        <p class="done"><b>Færdig når</b> du kan oprette et brand, en aftale og en leverance, og se dem hænge rigtigt sammen i alle fire skærme. <b>Herfra kan systemet bruges i hverdagen.</b></p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <span class="n">3</span>
+      <div>
+        <div class="phase-head"><h3>Mail ud</h3><span class="est">½ uge</span></div>
+        <ul>
+          <li>Afsenderdomæne verificeret med DKIM, SPF og DMARC</li>
+          <li>Skabeloner: opfølgning, godkendelsesanmodning, afrapportering, faktura-varsel</li>
+          <li>Åbninger og klik lander tilbage på aftalen via webhook</li>
+          <li>Afmelding og spærreliste, så en sekvens aldrig rammer nogen der har sagt fra</li>
+        </ul>
+        <p class="done"><b>Færdig når</b> en opfølgning kan sendes fra et aftalekort, og du kan se på kortet at den blev åbnet.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <span class="n">4</span>
+      <div>
+        <div class="phase-head"><h3>Mail ind</h3><span class="est">1 uge</span></div>
+        <ul>
+          <li>Gmail kobles på med læseadgang; nye mails skubbes ind i systemet i stedet for at blive hentet på klokkeslæt</li>
+          <li>Tråde matches til brand på afsenderdomæne, og til aftale på tråd-id</li>
+          <li>Ukendte afsendere bliver til <em>forslag</em> om et nyt lead, som du godkender med ét klik</li>
+        </ul>
+        <p class="done"><b>Færdig når</b> en mail fra et kendt brand dukker op på den rigtige aftale inden for et minut, uden at du gør noget.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <span class="n">5</span>
+      <div>
+        <div class="phase-head"><h3>Automatikmotoren</h3><span class="est">1–1½ uge</span></div>
+        <ul>
+          <li>Regler i databasen, kørt hvert femte minut, plus hændelsesudløste triggere</li>
+          <li>Idempotensnøgle pr. regel, aftale og dag — samme mail kan aldrig sendes to gange</li>
+          <li>Tørkørsel i to uger: reglerne foreslår og logger, men sender ikke, før du har set hvad de ville have gjort</li>
+          <li>Automatik kan sættes på pause pr. aftale, når en dialog kræver håndholdt tone</li>
+        </ul>
+        <p class="done"><b>Færdig når</b> de otte første regler kører i tørkørsel og logger deres forslag i ugebriefen.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <span class="n">6</span>
+      <div>
+        <div class="phase-head"><h3>Kalender og produktion</h3><span class="est">½ uge</span></div>
+        <ul>
+          <li>Én delt kalender “Byggeligt produktion”, synkroniseret begge veje</li>
+          <li>Flytter du en deadline i kalenderen, flytter leverancen med — og omvendt</li>
+          <li>Kapacitet og optagedage blokerer i kalenderen, så to brands ikke bookes samme dag</li>
+        </ul>
+        <p class="done"><b>Færdig når</b> en underskrevet aftale selv lægger sine optagedage og deadlines i kalenderen.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <span class="n">7</span>
+      <div>
+        <div class="phase-head"><h3>AI-laget</h3><span class="est">1 uge</span></div>
+        <ul>
+          <li>Udtræk af budget, ønsket format og deadline fra indgående mails, som struktureret data — ikke som fritekst</li>
+          <li>Oplæg og genkøbsforslag bygget på tidligere kampagners faktiske tal</li>
+          <li>Mandagsbriefen skrevet ud fra ugens hændelser</li>
+          <li>Spørgsmål i almindeligt dansk mod et låst, skrivebeskyttet udsnit af data — aldrig fri adgang til databasen</li>
+        </ul>
+        <p class="done"><b>Færdig når</b> en indgående mail fra et ukendt brand giver et udfyldt lead-forslag, du kan godkende eller afvise.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <span class="n">8</span>
+      <div>
+        <div class="phase-head"><h3>Hærdning og drift</h3><span class="est">½ uge</span></div>
+        <ul>
+          <li>Backup med gendannelse til et vilkårligt tidspunkt, og en prøvegendannelse der faktisk er afprøvet</li>
+          <li>Fejlalarmer på mail, når en automatik fejler to gange i træk</li>
+          <li>Sletterutine for kontakter, databehandleraftaler på plads, alle data i EU</li>
+          <li>Nøgler og hemmeligheder kun i miljøvariabler — aldrig i repoet</li>
+        </ul>
+        <p class="done"><b>Færdig når</b> systemet kan tåle at du holder ferie i tre uger.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>De otte første automatikregler</h2>
+    <p class="lede">De bygges i Spring 5 og kører i tørkørsel, indtil du har set to ugers forslag og sagt god for dem.</p>
+    <div class="t-scroll">
+      <table>
+        <thead><tr><th>Når dette sker</th><th>Gør systemet</th><th>Hvem godkender</th></tr></thead>
+        <tbody>
+          <tr><td>Mail modtaget fra kendt brand</td><td>Lægger den på aftalen og flytter Lead til Kontaktet</td><td class="muted">Ingen — den er sikker</td></tr>
+          <tr><td>Tilbud åbnet to gange samme dag</td><td>Opretter opgaven “ring i dag” med begrundelsen</td><td class="muted">Ingen</td></tr>
+          <tr><td>Syv og fjorten dage uden svar</td><td>Skriver opfølgning i din tone og sender</td><td>Dig, første måned</td></tr>
+          <tr><td>Kontrakt underskrevet</td><td>Flytter til Vundet, opretter leverancer, brugsret og kalenderpunkter</td><td class="muted">Ingen</td></tr>
+          <tr><td>Deadline om tre dage</td><td>Påminder den ansvarlige, og brandet hvis de mangler at godkende</td><td class="muted">Ingen</td></tr>
+          <tr><td>Alle leverancer godkendt</td><td>Lægger fakturaudkast klar og sender afrapportering med tal</td><td>Dig — altid</td></tr>
+          <tr><td>Brugsret udløber om 30 dage</td><td>Giver besked, og foreslår forlængelse som mersalg</td><td>Dig</td></tr>
+          <tr><td>90 dage efter levering</td><td>Bygger genkøbs-oplæg på de bedst præsterende leverancer</td><td>Dig</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <h3>Reglen bag reglerne</h3>
+      <p>Alt der sender noget ud af huset i en kundes navn, skal kunne slås fra, sættes på pause og ses i loggen bagefter. Et CRM der sender en tåbelig mail til STARK klokken tre om natten, koster mere end det sparer.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Hvad AI-laget koster</h2>
+    <p class="lede">Regnet på et realistisk forbrug: cirka 400 indgående mails, 40 oplæg og fire ugebriefer om måneden.</p>
+    <div class="t-scroll">
+      <table>
+        <thead><tr><th>Opgave</th><th>Model</th><th>Hvorfor</th><th>Pris pr. mio. tegnenheder</th></tr></thead>
+        <tbody>
+          <tr><td>Oplæg, genkøbsforslag, ugebrief</td><td><code>claude-opus-5</code></td><td>Skal ramme jeres tone og forstå sammenhængen på tværs af kampagner</td><td class="muted">5 ind / 25 ud (USD)</td></tr>
+          <tr><td>Udtræk af felter fra mails</td><td><code>claude-haiku-4-5</code></td><td>Mange små, ensartede opgaver hvor svaret er struktureret data</td><td class="muted">1 ind / 5 ud (USD)</td></tr>
+          <tr><td>Spørgsmål i almindeligt dansk</td><td><code>claude-sonnet-5</code></td><td>Skal svare hurtigt, mens du står og kigger på skærmen</td><td class="muted">2 ind / 10 ud (USD)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:13px;color:var(--ink-2);margin-top:14px">Med caching af den faste del af instruktionerne lander det på småpenge om måneden — langt under hvad en enkelt tabt opfølgning koster. Det præcise tal afhænger af mailmængden, og vi måler det fra første uge.</p>
+  </section>
+
+  <section>
+    <h2>Fire ting jeg mangler svar på</h2>
+    <p class="lede">Ingen af dem blokerer Spring 0 og 1. Men de skal være afklaret, inden vi bygger henholdsvis Spring 2, 5 og 7.</p>
+    <div class="q"><span class="bx"></span><div>
+      <h3>Hvor mange skal bruge systemet — og med hvilke rettigheder?</h3>
+      <p>Er det kun dig, eller skal en redaktør kunne se leverancer uden at se økonomien? Det afgør, hvor fintmasket adgangskontrollen skal skæres i Spring 1.</p>
+    </div></div>
+    <div class="q"><span class="bx"></span><div>
+      <h3>Skal fakturering integreres, eller er udkast nok?</h3>
+      <p>e-conomic, Dinero og Billy har alle et API. Alternativet er, at systemet lægger et udkast klar, som du selv opretter i dit bogholderi. Det første koster en uge mere.</p>
+    </div></div>
+    <div class="q"><span class="bx"></span><div>
+      <h3>Kampagnetal: hentes automatisk eller tastes ind?</h3>
+      <p>Meta, TikTok og YouTube har API'er, men de kræver hver deres godkendelse og tager tid. Manuel indtastning af fem tal efter hver kampagne kommer os 80 procent af vejen med det samme.</p>
+    </div></div>
+    <div class="q"><span class="bx"></span><div>
+      <h3>Hvor skal n8n køre?</h3>
+      <p>Forbindelsen svarede ikke, da jeg tjekkede. Kører I n8n selv eller i deres sky? Hvis I ikke er stærkt knyttet til den, kan de fleste af reglerne lige så godt bo i databasen, hvor de er lettere at fejlsøge.</p>
+    </div></div>
+  </section>
+
+  <p class="foot">Køreplanen ligger i repoet som <span class="code">docs/koereplan-backend.html</span>. Anslåede varigheder forudsætter én udvikler på fuld tid og ingen ventetid på godkendelser fra Google og Resend, som erfaringsmæssigt kan tage nogle dage. Priser på AI-laget er Anthropics listepriser i dollar og kan ændre sig.</p>
+
+</div>
